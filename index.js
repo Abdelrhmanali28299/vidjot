@@ -9,7 +9,7 @@ const bcrypt = require('bcryptjs')
 const passport = require('passport')
 const Idea = require('./models/Idea')
 const User = require('./models/user')
-const {ensureAuthenticated} = require('./helpers/auth')
+const { ensureAuthenticated } = require('./helpers/auth')
 require('./config/passport')(passport)
 
 const app = express()
@@ -53,11 +53,11 @@ app.get('/about', (req, res) => {
 })
 
 app.get('/ideas', ensureAuthenticated, (req, res) => {
-    Idea.find({user: req.user.id})
+    Idea.find({ user: req.user.id })
         .sort({ date: 'desc' })
         .then((data) => {
-        res.render('idea.ejs', { data })
-    })
+            res.render('idea.ejs', { data })
+        })
 })
 
 app.get('/ideas/add', ensureAuthenticated, (req, res) => {
@@ -94,10 +94,10 @@ app.post('/ideas/add', ensureAuthenticated, (req, res) => {
 app.get('/ideas/edit/:id', ensureAuthenticated, (req, res) => {
     Idea.findOne({ _id: req.params.id })
         .then((data) => {
-            if(data.user === req.user.id){
+            if (data.user === req.user.id) {
                 res.render('edit.ejs', { errors: null, data })
             } else {
-                req.flash('error_msg','Not Authorized')
+                req.flash('error_msg', 'Not Authorized')
                 res.redirect('/ideas')
             }
         })
@@ -195,9 +195,9 @@ app.post('/user/login', (req, res, next) => {
     })(req, res, next)
 })
 
-app.get('/user/logout',(req, res)=>{
+app.get('/user/logout', (req, res) => {
     req.logOut()
-    req.flash('success_msg','You are loged out');
+    req.flash('success_msg', 'You are loged out');
     res.redirect('/user/login')
 })
 
